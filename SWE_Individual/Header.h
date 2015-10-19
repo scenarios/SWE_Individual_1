@@ -2,6 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include <stdio.h>
+#include <cstring>
 
 #define P_P 1
 #define P_N 2

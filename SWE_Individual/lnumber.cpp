@@ -13,6 +13,48 @@ lnumber::lnumber()
 
 }
 
+lnumber::lnumber(int input, const int suffix_N, bool symbol)
+{
+	if (input_ != NULL)
+		delete[] input_;
+	int i = 0;
+	int temp;
+	temp = input / 10;
+	while (temp != 0){
+		i++;
+		temp = temp / 10;
+	}
+	input_ = new char[i + 1 + suffix_N];
+	memset(input_, '0', i + 1 + suffix_N);
+
+	for (int j = i; j >= 0; j--){
+		input_[j] = input % 10 + '0';
+		input /= 10;
+	}
+
+	number_ = input_;
+	length_ = i + 1 + suffix_N;
+	zero_bit_ = 0;
+	out_symbol_ = symbol;
+	pattern_ = 0;
+}
+
+lnumber::lnumber(short* input, const int N, const int e_length, bool symbol)
+{
+	e_length_ = e_length;
+	number_s_ = new short[e_length_];
+//	memset(number_s_, 0, e_length_ * sizeof(number_s_));
+	for (int i = e_length_ - 1; i > N - 1; i--)
+		number_s_[i] = 0;
+	for (int i = N - 1; i >= 0; i--)
+		number_s_[i] = input[i];
+	delete[] input;
+	length_ = N;
+	zero_bit_ = 0;
+	out_symbol_ = symbol;
+	pattern_ = 0;
+}
+
 lnumber::lnumber(char* input, const int N, bool symbol)
 {
 	if (input_ != NULL)
@@ -49,6 +91,22 @@ lnumber::lnumber(char* input_q, char* input_r, const int N_q, const int N_r)
 	zero_bit_ = 0;
 	out_symbol_ = true;
 	pattern_ = 0;
+}
+
+lnumber lnumber::mul_V_C(char num_c)
+{
+	short num = num_c - '0';
+	char* mul_result = new char[length_ + 1];
+	short temp = 0;
+	short carry = 0;;
+	for (int i = length_ - 1; i >= 0; i--){
+		temp = (number_[i] - '0') * num + carry;
+		mul_result[i+1] = temp % 10 + '0';
+		carry = temp / 10;
+	}
+	mul_result[0] = carry + '0';
+	if (mul_result[0] == '0') return lnumber(mul_result, length_, 1, true);
+	else return lnumber(mul_result, length_ + 1, 0, true);
 }
 
 void lnumber::operator=(const lnumber &r)
@@ -401,6 +459,8 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(r.number_[s] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
+				if (carry == 0 && (te % 10) == 0)
+					zero_bit += 1;
 				l--;
 				s--;
 			}
@@ -499,17 +559,40 @@ lnumber lnumber::operator*(const lnumber &r){
 */
 
 lnumber lnumber::operator*(lnumber &r){
+	complex* f1;
+	complex* f2;
+	complex* result;
+	
+	f1 = FFT(r.number_s_, e_length_, e_length_);
+	f2 = FFT(number_s_, e_length_, e_length_);
+	
+	complex* f = new complex[e_length_];
+	for (int k = 0; k < e_length_; k++){
+		f[k].r = f1[k].r * f2[k].r - f1[k].i * f2[k].i;
+		f[k].i = f1[k].r * f2[k].i + f1[k].i * f2[k].r;
+	}
+
+	result = REVERSE_FFT(f, e_length_, e_length_);
+	
+	lnumber temp;
 	lnumber ac;
+/*	for(int i = 0; i < e_length_; i++){
+		temp = lnumber(round(result[i].r), i, true);
+		ac = ac + temp;
+	}
+*/	return ac;
+	/*
+	lnumber ac;
+	lnumber temp;
 	for (int i = length_ - 1; i >= 0; i--){
-		
-		for (int j = 0; j < int(number_[i] - '0'); j++){
-			ac = ac + r;
-		}
+		temp = r.mul_V_C(number_[i]);
+		ac = ac + temp;
 		r.time_10_();
 	}
 	
 	return ac;
-}
+	*/
+	}
 
 lnumber lnumber::operator/(lnumber &r){
 	

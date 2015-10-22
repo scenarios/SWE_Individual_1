@@ -4,7 +4,6 @@ complex* FFT(short* x, int length_current, int length_total)
 {
 	if (length_current == 1){
 		complex* X = new complex[length_current];
-		
 /*		for (int k = 0; k <= length_total - 1; k++){
 //			X[k].r = x[0] + cos(-2 * m_pi * k / length_current) * x[1];
 //			X[k].i = sin(-2 * m_pi * k / length_current) * x[1];

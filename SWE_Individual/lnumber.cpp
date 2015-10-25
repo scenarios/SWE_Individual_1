@@ -141,6 +141,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(number_[l] - '0' + r.number_[s] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
+				if ((te % 10) == 0)
+					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -148,6 +152,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(number_[l] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
+				if ((te % 10) == 0)
+					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -155,6 +163,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(r.number_[s] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
+				if ((te % 10) == 0)
+					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -445,6 +457,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(number_[l] - '0' + r.number_[s] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10;
+				if ((te % 10) == 0)
+					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -452,6 +468,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(number_[l] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
+				if ((te % 10) == 0)
+					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -459,8 +479,10 @@ lnumber lnumber::operator+(const lnumber &r)
 				int te = int(r.number_[s] - '0' + carry);
 				output[i + 1] = te % 10 + '0';
 				carry = te / 10 ;
-				if (carry == 0 && (te % 10) == 0)
+				if ((te % 10) == 0)
 					zero_bit += 1;
+				else
+					zero_bit = 0;
 				l--;
 				s--;
 			}
@@ -558,13 +580,14 @@ lnumber lnumber::operator*(const lnumber &r){
 }
 */
 
-lnumber lnumber::operator*(lnumber &r){
+void lnumber::operator*(lnumber &r){
 	complex* f1;
 	complex* f2;
 	complex* result;
-	
-	f1 = FFT(r.number_s_, e_length_, e_length_);
-	f2 = FFT(number_s_, e_length_, e_length_);
+	short* x1 = new short[e_length_ / 2];
+	complex* X1 = new complex[e_length_ / 2];
+	f1 = FFT(r.number_s_, e_length_, e_length_, x1);
+	f2 = FFT(number_s_, e_length_, e_length_, x1);
 	
 	complex* f = new complex[e_length_];
 	for (int k = 0; k < e_length_; k++){
@@ -572,15 +595,37 @@ lnumber lnumber::operator*(lnumber &r){
 		f[k].i = f1[k].r * f2[k].i + f1[k].i * f2[k].r;
 	}
 
-	result = REVERSE_FFT(f, e_length_, e_length_);
+	result = REVERSE_FFT(f, e_length_, e_length_, X1);
+	if (out_for_mul_flag){
+		for (int i = 0; i < e_length_ - 1; i++){
+			int f, c;
+			f = round(result[i + 1].r);
+			c = round(result[i].r);
+			
+			result[i + 1].r = f + c / 10;
+			result[i].r = c % 10;
+	//		result[i + 1].r = int(result[i + 1].r) + int(result[i].r) / 10;
+	//		result[i].r = int(result[i].r) % 10;
+		}
+		for (int i = e_length_ - 1; i >= 0; i--){
+			if (result[i].r > 0.5)
+				cout << round(result[i].r);
+			else{}
+		}
+	}
+	delete[] x1;
+	delete[] X1;
 	
+	
+	/*
 	lnumber temp;
 	lnumber ac;
-/*	for(int i = 0; i < e_length_; i++){
+	for(int i = 0; i < e_length_; i++){
 		temp = lnumber(round(result[i].r), i, true);
 		ac = ac + temp;
 	}
-*/	return ac;
+	return ac;
+	*/
 	/*
 	lnumber ac;
 	lnumber temp;
@@ -638,10 +683,10 @@ void lnumber::out(){
 	if (quotient == NULL)
 	{
 		
-		printf("%c%s", out_symbol_ == true ? ' ' : '-', number_);
+		printf("%c%s\n", out_symbol_ == true ? '\0' : '-', number_);
 	}
 	else{
-		printf("%c%s, %c%s", out_symbol_ == true ? ' ' : '-', quotient, out_symbol_ == true ? ' ' : '-', remainder);
+		printf("%c%s\n, %c%s\n", out_symbol_ == true ? '\0' : '-', quotient, out_symbol_ == true ? ' ' : '-', remainder);
 	}
 }
 

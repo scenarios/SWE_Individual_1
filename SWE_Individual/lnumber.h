@@ -12,11 +12,12 @@ public:
 	lnumber(char* input, const int N, const int zero_bit, bool out_symbol);
 	lnumber(char* quotient, char* remainder, const int N_q, const int N_r);
 	void out();
+	void out_for_multiple(){ out_for_mul_flag = true; }
 	~lnumber();
 	void operator =(const lnumber &r);
 	lnumber operator +(const lnumber &r);
 	lnumber operator -(const lnumber &r);
-	lnumber operator *(lnumber &r);
+	void operator *(lnumber &r);
 	lnumber operator /(lnumber &r);
 
 private:
@@ -32,6 +33,7 @@ private:
 	int length_q_ = NULL;
 	int length_r_ = NULL;
 	int e_length_ = NULL;
+	bool out_for_mul_flag = true;
 private:
 	void time_10_(){ number_[length_] = '0'; length_++; }
 	void time_N_(int N){ length_ += N; }

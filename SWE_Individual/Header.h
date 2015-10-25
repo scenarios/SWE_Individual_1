@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <cstring>
 #include <math.h>
+#include <fstream>
+#include <string>
 
 #define P_P 1
 #define P_N 2

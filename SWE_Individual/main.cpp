@@ -4,7 +4,91 @@
 #pragma comment(lib,"winmm.lib") 
 void main(void){
 	
+	string temp;
+	string x1;
+	string x2;
+	int lines = 0;
+	char symbol;
+	cout << "input the operation : + - * /:" << endl;
+	cin >> temp;
+	symbol = temp[0];
+	cout << "input first number" << endl;
+	cin >> x1;
+	cout << "input second number" << endl;
+	cin >> x2;
+
 	
+	
+
+
+	if (symbol == '+'){
+		char* a = new char[x1.length()];
+		char* b = new char[x2.length()];
+		x1.copy(a, x1.length(), 0);
+		x2.copy(b, x2.length(), 0);
+		lnumber A(a, x1.length(), true);
+		lnumber B(b, x2.length(), true);
+		lnumber C;
+		C = A + B;
+		C.out();
+	}
+	else if (symbol == '-'){
+		char* a = new char[x1.length()];
+		char* b = new char[x2.length()];
+		x1.copy(a, x1.length(), 0);
+		x2.copy(b, x2.length(), 0);
+		lnumber A(a, x1.length(), true);
+		lnumber B(b, x2.length(), true);
+		lnumber C;
+		C = A - B;
+		C.out();
+	}
+	else if (symbol == '*'){
+		
+		int e_l = pow(2, floor(log2(x1.length() + x2.length())) + 1);
+		short *a = new short[e_l];
+		short *b = new short[e_l];
+		memset(a, 0, e_l * sizeof(short));
+		memset(b, 0, e_l * sizeof(short));
+		int j = x1.length()- 1;
+		for (int i = 0; i < x1.length(); i++){
+			a[i] = x1[j--] - '0';
+			
+		}
+		j = x2.length() - 1;
+		for (int i = 0; i < x2.length(); i++){
+			b[i] = x2[j--] - '0';
+			
+		}
+		
+		lnumber A(a, x1.length(), e_l, true), B(b, x2.length(), e_l, true), C;
+		A*B;
+
+
+
+	}
+	else if (symbol == '/'){
+		if (x1.length() < x2.length()){
+
+		}
+		else{
+			char *a = new char[x1.length()];
+			char *b = new char[x1.length() + 1];
+			memset(b, '0', (x1.length() + 1) * sizeof(char));
+			x1.copy(a, x1.length(), 0);
+			x2.copy(b, x1.length(), 0);
+			lnumber A(a, x1.length(), true);
+			lnumber B(b, x2.length(), true);
+			lnumber C;
+			C = A / B;
+			C.out();
+		}
+	}
+	else{
+		cout << "+ - * / needed";
+	}
+	
+	/*
 	short *y = new short[600000];
 	short *x = new short[600000];
 	int e_l = pow(2, floor(log2(1200000)) + 1);
@@ -13,11 +97,14 @@ void main(void){
 		x[i] = i % 10;
 		y[i] = i % 10;
 	}
-	
+	*/
 	
 	/*
 	short* x = new short[8];
 	short* y = new short[8];
+	short* x1 = new short[4];
+	short* x2 = new short[4];
+	complex* X1 = new complex[4];
 	x[0] = 8;
 	x[1] = 7;
 	x[2] = 6;
@@ -39,8 +126,8 @@ void main(void){
 	complex* result;
 	int e_length;
 	e_length = pow(2, floor(log2(3 + 3)) + 1);
-	f1 = FFT(x, 8, 8);
-	f2 = FFT(y, 8, 8);
+	f1 = FFT(x, 8, 8, x1);
+	f2 = FFT(y, 8, 8, x1);
 
 	complex* f = new complex[e_length];
 	for (int k = 0; k < e_length; k++){
@@ -49,7 +136,7 @@ void main(void){
 	}
 	for (int i = 0; i < 8; i++)
 		cout << f1[i].r << ' ' << f1[i].i << endl;
-	result = REVERSE_FFT(f, e_length, e_length);
+	result = REVERSE_FFT(f, e_length, e_length, X1);
 	for (int i = 0; i < 8; i++)
 		cout << result[i].r << ' ' << result[i].i << endl;
 	*/
@@ -109,7 +196,7 @@ void main(void){
 	lnumber *B = new lnumber(b, 8, true);
 	lnumber *C = new lnumber(a, 2, true);
 	*/
-	
+/*
 	lnumber A(x, 600000, e_l, true), B(y, 600000, e_l, true), C;
 
 	DWORD t1, t2;
@@ -117,8 +204,7 @@ void main(void){
 	A*B;
 	t2 = timeGetTime();
 	cout << endl << (t2 - t1)*1.0 / 1000 << endl;
-
-
+*/	
 
 /*	lnumber A(a, 60000, true);
 	lnumber B(b, 60000, true);

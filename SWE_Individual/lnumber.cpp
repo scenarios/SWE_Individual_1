@@ -174,6 +174,8 @@ lnumber lnumber::operator+(const lnumber &r)
 				output[i + 1] = carry + '0';
 				if (carry == 0)
 					zero_bit += 1;
+				else
+					zero_bit = 0;
 			}
 		}
 	//	delete[] input_;
@@ -490,6 +492,8 @@ lnumber lnumber::operator+(const lnumber &r)
 				output[i + 1] = carry + '0';
 				if (carry == 0)
 					zero_bit += 1;
+				else
+					zero_bit = 0;
 			}
 		}
 //		delete[] input_;
@@ -612,6 +616,7 @@ void lnumber::operator*(lnumber &r){
 				cout << round(result[i].r);
 			else{}
 		}
+		cout << endl;
 	}
 	delete[] x1;
 	delete[] X1;
@@ -686,7 +691,7 @@ void lnumber::out(){
 		printf("%c%s\n", out_symbol_ == true ? '\0' : '-', number_);
 	}
 	else{
-		printf("%c%s\n, %c%s\n", out_symbol_ == true ? '\0' : '-', quotient, out_symbol_ == true ? ' ' : '-', remainder);
+		printf("%c%s\n%c%s\n", out_symbol_ == true ? '\0' : '-', quotient, out_symbol_ == true ? ' ' : '-', remainder);
 	}
 }
 

@@ -69,7 +69,8 @@ void main(void){
 	}
 	else if (symbol == '/'){
 		if (x1.length() < x2.length()){
-
+			cout << 0 << endl;
+			cout << x1 << endl;
 		}
 		else{
 			char *a = new char[x1.length()];
@@ -218,5 +219,5 @@ void main(void){
 	
 	//A = *A - *C;
 	//A->out();*/
-	system("Pause");
+	//system("Pause");
 }

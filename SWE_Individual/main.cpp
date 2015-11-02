@@ -219,5 +219,5 @@ void main(void){
 	
 	//A = *A - *C;
 	//A->out();*/
-	//system("Pause");
+	system("Pause");
 }

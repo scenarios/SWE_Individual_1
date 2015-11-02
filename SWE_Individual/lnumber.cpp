@@ -523,66 +523,7 @@ lnumber lnumber::operator-(const lnumber &r){
 	}
 	
 }
-/*
-lnumber lnumber::operator*(const lnumber &r){
-	if (length_ >= r.length_){
-		lnumber ac;
-		for (int i = r.length_ - 1; i >= 0; i--){
-			for (int j = length_ - 1; j >= 0; j--){
 
-				char temp_char = (r.number_[i] - '0') * (number_[j] - '0');
-				if (temp_char / 10 != 0){
-					int length = (r.length_ - 1 - i) + (length_ - 1 - j) + 2;
-					char *temp = new char[length];
-					memset(temp, '0', length);
-					temp[0] = temp_char / 10 + '0';
-					temp[1] = temp_char % 10 + '0';
-					lnumber mulresult(temp, length, true);
-					ac = ac + mulresult;
-				}
-				else{
-					int length = (r.length_ - 1 - i) + (length_ - 1 - j) + 1;
-					char *temp = new char[length];
-					memset(temp, '0', length);
-					temp[0] = temp_char + '0';
-					lnumber mulresult(temp, length, true);
-					ac = ac + mulresult;
-				}
-
-			}
-		}
-		return ac;
-	}
-	else{
-		lnumber ac;
-		for (int j = length_ - 1; j >= 0; j--){
-			for (int i = r.length_ - 1; i >= 0; i--){
-
-				char temp_char = (r.number_[i] - '0') * (number_[j] - '0');
-				if (temp_char / 10 != 0){
-					int length = (r.length_ - 1 - i) + (length_ - 1 - j) + 2;
-					char *temp = new char[length];
-					memset(temp, '0', length);
-					temp[0] = temp_char / 10 + '0';
-					temp[1] = temp_char % 10 + '0';
-					lnumber mulresult(temp, length, true);
-					ac = ac + mulresult;
-				}
-				else{
-					int length = (r.length_ - 1 - i) + (length_ - 1 - j) + 1;
-					char *temp = new char[length];
-					memset(temp, '0', length);
-					temp[0] = temp_char + '0';
-					lnumber mulresult(temp, length, true);
-					ac = ac + mulresult;
-				}
-
-			}
-		}
-		return ac;
-	}
-}
-*/
 
 void lnumber::operator*(lnumber &r){
 	complex* f1;
@@ -611,37 +552,24 @@ void lnumber::operator*(lnumber &r){
 	//		result[i + 1].r = int(result[i + 1].r) + int(result[i].r) / 10;
 	//		result[i].r = int(result[i].r) % 10;
 		}
-		for (int i = e_length_ - 1; i >= 0; i--){
-			if (result[i].r > 0.5)
+		bool zero_bit_flag = false;
+		for (int i = e_length_ - 1 - length_ - r.length_; i >= 0; i--){
+			if (!zero_bit_flag){
+				if (result[i].r > 0.5){
+					zero_bit_flag = true;
+					cout << round(result[i].r);
+				}
+				else{}
+			}
+			else{
 				cout << round(result[i].r);
-			else{}
+			}
 		}
 		cout << endl;
 	}
 	delete[] x1;
 	delete[] X1;
 	
-	
-	/*
-	lnumber temp;
-	lnumber ac;
-	for(int i = 0; i < e_length_; i++){
-		temp = lnumber(round(result[i].r), i, true);
-		ac = ac + temp;
-	}
-	return ac;
-	*/
-	/*
-	lnumber ac;
-	lnumber temp;
-	for (int i = length_ - 1; i >= 0; i--){
-		temp = r.mul_V_C(number_[i]);
-		ac = ac + temp;
-		r.time_10_();
-	}
-	
-	return ac;
-	*/
 	}
 
 lnumber lnumber::operator/(lnumber &r){
@@ -687,11 +615,16 @@ lnumber lnumber::operator/(lnumber &r){
 void lnumber::out(){
 	if (quotient == NULL)
 	{
-		
-		printf("%c%s\n", out_symbol_ == true ? '\0' : '-', number_);
+		if (out_symbol_)
+			printf("%s\n", number_);
+		else
+			printf("%c%s\n", '-', number_);
 	}
 	else{
-		printf("%c%s\n%c%s\n", out_symbol_ == true ? '\0' : '-', quotient, out_symbol_ == true ? ' ' : '-', remainder);
+		if (out_symbol_)
+			printf("%s\n%s\n", quotient, remainder);
+		else
+			printf("%c%s\n%c%s\n",  '-', quotient, '-', remainder);
 	}
 }
 

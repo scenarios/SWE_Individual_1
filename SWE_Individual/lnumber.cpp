@@ -553,7 +553,7 @@ void lnumber::operator*(lnumber &r){
 	//		result[i].r = int(result[i].r) % 10;
 		}
 		bool zero_bit_flag = false;
-		for (int i = e_length_ - 1 - length_ - r.length_; i >= 0; i--){
+		for (int i = length_ + r.length_ - 1; i >= 0; i--){
 			if (!zero_bit_flag){
 				if (result[i].r > 0.5){
 					zero_bit_flag = true;
